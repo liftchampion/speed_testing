@@ -89,15 +89,15 @@ template<typename S>
 void sseCopyTest(char* src, char* dst){
 	for (int i = 0; i < 1; i++){
 		char* target = src + sizeof(S);
-		for (;src < target - 16; src += 16, dst += 16){
+		for (;src <= target - 16; src += 16, dst += 16){
 			__m128i buffer = _mm_load_si128((__m128i*)src);
 			_mm_store_si128((__m128i*)dst, buffer);
 		}
-		for(;src < target - 8; src += 8, dst += 8){
+		for(;src <= target - 8; src += 8, dst += 8){
 			__m128i buffer = _mm_loadl_epi64((__m128i_u*)src);
 			_mm_storel_epi64((__m128i_u*)dst, buffer);
 		}
-		for(;src < target - 4; src += 4, dst += 4){
+		for(;src <= target - 4; src += 4, dst += 4){
 			*(int*)dst = *(int*)src;
 		}
 		for(;src != target; src += 1, dst += 1){
@@ -110,19 +110,19 @@ template<typename S>
 inline void avxCopyTest(char* src, char* dst){
 	for (int i = 0; i < 1; i++){
 		char* target = src + sizeof(S);
-		for (;src < target - 32; src += 32, dst += 32){
+		for (;src <= target - 32; src += 32, dst += 32){
 			__m256i buffer = _mm256_load_si256((__m256i*)src);
 			_mm256_store_si256((__m256i*)dst, buffer);
 		}
-		for (;src < target - 16; src += 16, dst += 16){
+		for (;src <= target - 16; src += 16, dst += 16){
 			__m128i buffer = _mm_load_si128((__m128i*)src);
 			_mm_store_si128((__m128i*)dst, buffer);
 		}
-		for(;src < target - 8; src += 8, dst += 8){
+		for(;src <= target - 8; src += 8, dst += 8){
 			__m128i buffer = _mm_loadl_epi64((const __m128i_u*)src);
 			_mm_storel_epi64((__m128i_u*)dst, buffer);
 		}
-		for(;src < target - 4; src += 4, dst += 4){
+		for(;src <= target - 4; src += 4, dst += 4){
 			*(int*)dst = *(int*)src;
 		}
 		for(;src != target; src += 1, dst += 1){
@@ -135,19 +135,19 @@ template<typename S>
 inline void avx2CopyTest(char* src, char* dst){
 	for (int i = 0; i < 1; i++){
 		char* target = src + sizeof(S);
-		for (;src < target - 32; src += 32, dst += 32){
+		for (;src <= target - 32; src += 32, dst += 32){
 			__m256i buffer = _mm256_load_si256((__m256i*)src);
 			_mm256_stream_si256((__m256i*)dst, buffer);
 		}
-		for (;src < target - 16; src += 16, dst += 16){
+		for (;src <= target - 16; src += 16, dst += 16){
 			__m128i buffer = _mm_load_si128((__m128i*)src);
 			_mm_store_si128((__m128i*)dst, buffer);
 		}
-		for(;src < target - 8; src += 8, dst += 8){
+		for(;src <= target - 8; src += 8, dst += 8){
 			__m128i buffer = _mm_loadl_epi64((const __m128i_u*)src);
 			_mm_storel_epi64((__m128i_u*)dst, buffer);
 		}
-		for(;src < target - 4; src += 4, dst += 4){
+		for(;src <= target - 4; src += 4, dst += 4){
 			*(int*)dst = *(int*)src;
 		}
 		for(;src != target; src += 1, dst += 1){
@@ -289,6 +289,12 @@ int main()
 //	map["avx251CopyTest"]["NoPackMix"] = TestFunction<NoPackMix>(avx512CopyTest<NoPackMix>);
 //	map["avx512CopyTest"]["PackMix"] = TestFunction<PackMix>(avx512CopyTest<PackMix>);
 //	map["avx512CopyTest"]["ArrStruct"] = TestFunction<ArrStruct>(avx512CopyTest<PackMix>);
+
+	std::cout << "NoPackDesc" << ": " << sizeof(NoPackDesc) << std::endl;
+	std::cout << "PackDesc" << ": " << sizeof(PackDesc) << std::endl;
+	std::cout << "NoPackMix" << ": " << sizeof(NoPackMix) << std::endl;
+	std::cout << "PackMix" << ": " << sizeof(PackMix) << std::endl;
+	std::cout << "ArrStruct" << ": " << sizeof(ArrStruct) << std::endl;
 	print_final_results(map);
 	return 0;
 }
