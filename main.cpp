@@ -5,7 +5,7 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
-#include <immintrin.h>
+#include <x86intrin.h>
 
 #define SIZE_OF_STAT 1000000
 #define WARM_UP_TIMES 10
@@ -94,8 +94,8 @@ void sseCopyTest(char* src, char* dst){
 			_mm_store_si128((__m128i*)dst, buffer);
 		}
 		for(;src < target - 8; src += 8, dst += 8){
-			__m128i buffer = _mm_loadu_si64(src);
-			_mm_storeu_si64(dst, buffer);
+			__m128i buffer = _mm_loadl_epi64((__m128i_u*)src);
+			_mm_storel_epi64((__m128i_u*)dst, buffer);
 		}
 		for(;src < target - 4; src += 4, dst += 4){
 			*(int*)dst = *(int*)src;
@@ -119,8 +119,8 @@ inline void avxCopyTest(char* src, char* dst){
 			_mm_store_si128((__m128i*)dst, buffer);
 		}
 		for(;src < target - 8; src += 8, dst += 8){
-			__m128i buffer = _mm_loadu_si64(src);
-			_mm_storeu_si64(dst, buffer);
+			__m128i buffer = _mm_loadl_epi64((const __m128i_u*)src);
+			_mm_storel_epi64((__m128i_u*)dst, buffer);
 		}
 		for(;src < target - 4; src += 4, dst += 4){
 			*(int*)dst = *(int*)src;
@@ -144,8 +144,8 @@ inline void avx2CopyTest(char* src, char* dst){
 			_mm_store_si128((__m128i*)dst, buffer);
 		}
 		for(;src < target - 8; src += 8, dst += 8){
-			__m128i buffer = _mm_loadu_si64(src);
-			_mm_storeu_si64(dst, buffer);
+			__m128i buffer = _mm_loadl_epi64((const __m128i_u*)src);
+			_mm_storel_epi64((__m128i_u*)dst, buffer);
 		}
 		for(;src < target - 4; src += 4, dst += 4){
 			*(int*)dst = *(int*)src;
@@ -174,8 +174,8 @@ inline void avx2CopyTest(char* src, char* dst){
 //			_mm_store_si128((__m128i*)dst, buffer);
 //		}
 //		for(;src < target - 8; src += 8, dst += 8){
-//			__m128i buffer = _mm_loadu_si64(src);
-//			_mm_storeu_si64(dst, buffer);
+//			__m128i buffer = _mm_loadl_epi64(src);
+//			_mm_storel_epi64(dst, buffer);
 //		}
 //		for(;src < target - 4; src += 4, dst += 4){
 //			*(int*)dst = *(int*)src;
